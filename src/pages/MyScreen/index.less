@@ -15,5 +15,32 @@
 
 .cardAvatar {
   width: 100%;
-  border-radius: 48px;
 }
+
+.myCard {
+  :global {
+    .ant-card-meta-title {
+      float: left;
+      width: 100px;
+    }
+    .ant-card-meta-description {
+      float: right;
+    }
+    .ant-card-body {
+      padding: 10px;
+    }
+  }
+}
+
+.newButton {
+  width: 100%;
+  height: 260px;
+  color: @text-color-secondary;
+  background-color: @component-background;
+  border-color: @border-color-base;
+  border-radius: 4px;
+}
+
+// .resetMeat :global(.ant-card-meta-title) {
+//   width: 100px;
+// } 

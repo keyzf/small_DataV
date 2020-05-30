@@ -248,7 +248,8 @@ class Center extends Component {
               {!dataLoading && (
                 <div>
                   <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
+                    {/* <img alt="" src={currentUser.avatar} /> */}
+                    <img alt="" src="/Zero two_new3.png" />
                     <div className={styles.name}>{currentUser.name}</div>
                     <div>{currentUser.signature}</div>
                   </div>

@@ -1,147 +1,31 @@
-import { PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
+import { PlusOutlined, FullscreenOutlined, EditOutlined, SendOutlined } from '@ant-design/icons';
+import { Card, Button, List } from 'antd';
 import React, { Component, useState, useRef } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link, connect } from 'umi';
+import moment from 'moment';
 import styles from './index.less';
 
-const operationTabList = [
-  {
-    key: 'articles',
-    tab: (
-      <span>
-        文章{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'applications',
-    tab: (
-      <span>
-        应用{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'projects',
-    tab: (
-      <span>
-        项目{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-];
-
-const TagList = ({ tags }) => {
-  const ref = useRef(null);
-  const [newTags, setNewTags] = useState([]);
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  const showInput = () => {
-    setInputVisible(true);
-
-    if (ref.current) {
-      // eslint-disable-next-line no-unused-expressions
-      ref.current?.focus();
-    }
-  };
-
-  const handleInputChange = e => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    let tempsTags = [...newTags];
-
-    if (inputValue && tempsTags.filter(tag => tag.label === inputValue).length === 0) {
-      tempsTags = [
-        ...tempsTags,
-        {
-          key: `new-${tempsTags.length}`,
-          label: inputValue,
-        },
-      ];
-    }
-
-    setNewTags(tempsTags);
-    setInputVisible(false);
-    setInputValue('');
-  };
-
-  return (
-    <div className={styles.tags}>
-      <div className={styles.tagsTitle}>标签</div>
-      {(tags || []).concat(newTags).map(item => (
-        <Tag key={item.key}>{item.label}</Tag>
-      ))}
-      {inputVisible && (
-        <Input
-          ref={ref}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag
-          onClick={showInput}
-          style={{
-            borderStyle: 'dashed',
-          }}
-        >
-          <PlusOutlined />
-        </Tag>
-      )}
-    </div>
-  );
-};
+const { Meta } = Card;
 
 class CombinationScreen extends Component {
-  // static getDerivedStateFromProps(
-  //   props: accountAndcenterProps,
-  //   state: accountAndcenterState,
-  // ) {
-  //   const { match, location } = props;
-  //   const { tabKey } = state;
-  //   const path = match && match.path;
-  //   const urlTabKey = location.pathname.replace(`${path}/`, '');
-  //   if (urlTabKey && urlTabKey !== '/' && tabKey !== urlTabKey) {
-  //     return {
-  //       tabKey: urlTabKey,
-  //     };
-  //   }
-  //   return null;
-  // }
+  
   state = {
-    tabKey: 'articles',
+    loading: false,
+    list: [{
+      img:'',
+      name: '+新建图表',
+    },{
+      id: 1,
+      img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/6c877a80-9a1d-4186-a920-91256ea83722.png?ttl=242138036',
+      name:'test1',
+      status: 1, // 未发布
+    },{
+      id: 2,
+      img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/c41e7203-a7d9-43f2-8942-131ab7173a46.png?ttl=242138036',
+      name:'test2',
+      status: 2, // 已发布
+    }],
   };
 
   input = undefined;
@@ -156,140 +40,71 @@ class CombinationScreen extends Component {
     });
   }
 
-  onTabChange = key => {
-    // If you need to sync state to url
-    // const { match } = this.props;
-    // router.push(`${match.url}/${key}`);
-    this.setState({
-      tabKey: key,
-    });
-  };
-
-  renderChildrenByTabKey = tabKey => {
-    if (tabKey === 'projects') {
-      return null;
-    }
-
-    if (tabKey === 'applications') {
-      return null;
-    }
-
-    if (tabKey === 'articles') {
-      return null;
-    }
-
-    return null;
-  };
-
-  renderUserInfo = currentUser => (
-    <div className={styles.detail}>
-      <p>
-        <ContactsOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {currentUser.title}
-      </p>
-      <p>
-        <ClusterOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {currentUser.group}
-      </p>
-      <p>
-        <HomeOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {
-          (
-            currentUser.geographic || {
-              province: {
-                label: '',
-              },
-            }
-          ).province.label
-        }
-        {
-          (
-            currentUser.geographic || {
-              city: {
-                label: '',
-              },
-            }
-          ).city.label
-        }
-      </p>
-    </div>
-  );
+  
 
   render() {
-    const { tabKey } = this.state;
+    const { loading, list } = this.state;
     const { currentUser = {}, currentUserLoading } = this.props;
     const dataLoading = currentUserLoading || !(currentUser && Object.keys(currentUser).length);
     return (
-      <GridContent>
-        <Row gutter={24}>
-          <Col lg={7} md={24}>
-            <Card
-              bordered={false}
-              style={{
-                marginBottom: 24,
-              }}
-              loading={dataLoading}
-            >
-              {!dataLoading && (
-                <div>
-                  <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
-                    <div className={styles.name}>{currentUser.name}</div>
-                    <div>{currentUser.signature}</div>
-                  </div>
-                  {this.renderUserInfo(currentUser)}
-                  <Divider dashed />
-                  <TagList tags={currentUser.tags || []} />
-                  <Divider
-                    style={{
-                      marginTop: 16,
-                    }}
-                    dashed
-                  />
-                  <div className={styles.team}>
-                    <div className={styles.teamTitle}>团队</div>
-                    <Row gutter={36}>
-                      {currentUser.notice &&
-                        currentUser.notice.map(item => (
-                          <Col key={item.id} lg={24} xl={12}>
-                            <Link to={item.href}>
-                              <Avatar size="small" src={item.logo} />
-                              {item.member}
-                            </Link>
-                          </Col>
-                        ))}
-                    </Row>
-                  </div>
-                </div>
-              )}
-            </Card>
-          </Col>
-          <Col lg={17} md={24}>
-            <Card
-              className={styles.tabsCard}
-              bordered={false}
-              tabList={operationTabList}
-              activeTabKey={tabKey}
-              onTabChange={this.onTabChange}
-            >
-              {this.renderChildrenByTabKey(tabKey)}
-            </Card>
-          </Col>
-        </Row>
-      </GridContent>
-    );
+      <div>
+        <div className={styles.title}>组合大屏</div>
+        <div className={styles.content}>
+          <List
+            rowKey="id"
+            loading={ loading }
+            grid={{
+              gutter: 24,
+              xl: 4,
+              lg: 3,
+              md: 3,
+              sm: 2,
+              xs: 1,
+            }}
+            dataSource={list}
+            renderItem={item => {
+              if (item && item.id) {
+                return (
+                  <List.Item key={item.id}>
+                    <Card
+                      hoverable
+                      className={styles.card}
+                      cover={
+                        <img
+                          alt=""
+                          className={styles.cardAvatar}
+                          src={item.img}
+                        />
+                      }
+                      actions={[
+                        <FullscreenOutlined key="show"/>,
+                        <EditOutlined key="edit" />,
+                        <SendOutlined key="sumbit"/>,
+                        
+                      ]}
+                    >
+                      <Meta
+                        title={item.name}
+                        description={item.status === 1 ? <span style={{color:'#40a9ff'}}>已发布</span>:<span>待发布</span>}
+                        className={styles.myCard}
+                      />
+                    </Card>
+                  </List.Item>
+                );
+              }
+  
+              return (
+                <List.Item>
+                  <Button type="dashed" className={styles.newButton}>
+                    <PlusOutlined /> 新建图表
+                  </Button>
+                </List.Item>
+              );
+            }}
+          />
+        </div>
+      </div>
+    )
   }
 }
 

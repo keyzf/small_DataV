@@ -1,299 +1,190 @@
-import { PlusOutlined, HomeOutlined, ContactsOutlined, ClusterOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Input, Row, Tag } from 'antd';
-import React, { Component, useState, useRef } from 'react';
-import { GridContent } from '@ant-design/pro-layout';
-import { Link, connect } from 'umi';
+import { List, Col, Spin, Input, Row, Card, Button } from 'antd';
+import React, { PureComponent, useState, useRef } from 'react';
+import { connect, history } from 'umi';
 import styles from './index.less';
 
-const operationTabList = [
-  {
-    key: 'articles',
-    tab: (
-      <span>
-        文章{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'applications',
-    tab: (
-      <span>
-        应用{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-  {
-    key: 'projects',
-    tab: (
-      <span>
-        项目{' '}
-        <span
-          style={{
-            fontSize: 14,
-          }}
-        >
-          (8)
-        </span>
-      </span>
-    ),
-  },
-];
 
-const TagList = ({ tags }) => {
-  const ref = useRef(null);
-  const [newTags, setNewTags] = useState([]);
-  const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  const showInput = () => {
-    setInputVisible(true);
-
-    if (ref.current) {
-      // eslint-disable-next-line no-unused-expressions
-      ref.current?.focus();
+class VisualTemplate extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+     titleVal:'',
+     curImg: {
+      id: 1,
+      img:'/test.png',
+      name:'test1',
+      status: 1, 
+      content: {
+        title: "黑龙江是省各市地信息化发展水平总体分析",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "黑龙江是省各市地信息化发展水平总体分析数据可视化"
+      }
+     },
+     descriptionContent: {
+      title: "黑龙江是省各市地信息化发展水平总体分析",
+      ratio: "16 / 9",
+      pxr: "1900*1080px",
+      description: "黑龙江是省各市地信息化发展水平总体分析数据可视化"
+     },
+     list: [{
+        id: 1,
+        img:'/test.png',
+        name:'test1',
+        status: 1, // 未发布
+        content: {
+          title: "黑龙江是省各市地信息化发展水平总体分析",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "黑龙江是省各市地信息化发展水平总体分析数据可视化"
+        }
+      },{
+        id: 2,
+        img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/c41e7203-a7d9-43f2-8942-131ab7173a46.png?ttl=242138036',
+        name:'test2',
+        status: 2, // 已发布
+        content: {
+          title: "基于云计算的工业互联网实时监控",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "适用于云计算的工业互联网实时监控"
+        }
+      },{
+        id: 3,
+        img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/6c877a80-9a1d-4186-a920-91256ea83722.png?ttl=242138036',
+        name:'test1',
+        status: 1, // 未发布
+        content: {
+          title: "能源化工管理平台",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "应用于能源化工产业的产销情况"
+        }
+      },{
+        id: 4,
+        img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/c41e7203-a7d9-43f2-8942-131ab7173a46.png?ttl=242138036',
+        name:'test2',
+        status: 2, // 已发布
+        content: {
+          title: "基于云计算的工业互联网实时监控",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "适用于云计算的工业互联网实时监控"
+        }
+      },{
+        id: 5,
+        img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/6c877a80-9a1d-4186-a920-91256ea83722.png?ttl=242138036',
+        name:'test1',
+        status: 1, // 未发布
+        content: {
+          title: "能源化工管理平台",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "应用于能源化工产业的产销情况"
+        }
+      },{
+        id: 6,
+        img:'https://dlv-public-image.obs.cn-north-1.myhuaweicloud.com/c41e7203-a7d9-43f2-8942-131ab7173a46.png?ttl=242138036',
+        name:'test2',
+        status: 2, // 已发布
+        content: {
+          title: "基于云计算的工业互联网实时监控",
+          ratio: "16 / 9",
+          pxr: "1900*1080px",
+          description: "适用于云计算的工业互联网实时监控"
+        }
+      },]
     }
-  };
-
-  const handleInputChange = e => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputConfirm = () => {
-    let tempsTags = [...newTags];
-
-    if (inputValue && tempsTags.filter(tag => tag.label === inputValue).length === 0) {
-      tempsTags = [
-        ...tempsTags,
-        {
-          key: `new-${tempsTags.length}`,
-          label: inputValue,
-        },
-      ];
-    }
-
-    setNewTags(tempsTags);
-    setInputVisible(false);
-    setInputValue('');
-  };
-
-  return (
-    <div className={styles.tags}>
-      <div className={styles.tagsTitle}>标签</div>
-      {(tags || []).concat(newTags).map(item => (
-        <Tag key={item.key}>{item.label}</Tag>
-      ))}
-      {inputVisible && (
-        <Input
-          ref={ref}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      )}
-      {!inputVisible && (
-        <Tag
-          onClick={showInput}
-          style={{
-            borderStyle: 'dashed',
-          }}
-        >
-          <PlusOutlined />
-        </Tag>
-      )}
-    </div>
-  );
-};
-
-class VisualTemplate extends Component {
-  // static getDerivedStateFromProps(
-  //   props: accountAndcenterProps,
-  //   state: accountAndcenterState,
-  // ) {
-  //   const { match, location } = props;
-  //   const { tabKey } = state;
-  //   const path = match && match.path;
-  //   const urlTabKey = location.pathname.replace(`${path}/`, '');
-  //   if (urlTabKey && urlTabKey !== '/' && tabKey !== urlTabKey) {
-  //     return {
-  //       tabKey: urlTabKey,
-  //     };
-  //   }
-  //   return null;
-  // }
-  state = {
-    tabKey: 'articles',
-  };
-
-  input = undefined;
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'accountAndcenter/fetchCurrent',
-    });
-    dispatch({
-      type: 'accountAndcenter/fetch',
-    });
   }
 
-  onTabChange = key => {
-    // If you need to sync state to url
-    // const { match } = this.props;
-    // router.push(`${match.url}/${key}`);
+  checkTemplate = (item) => {
     this.setState({
-      tabKey: key,
-    });
-  };
+      curImg: {...item},
+      descriptionContent: {...item.content},
+    })
+  }
+  
+  // 标题输入框内容变化回调函数
+  inputChange = e => {
+    this.setState({
+      titleVal: e.target.value
+    })
+  }
 
-  renderChildrenByTabKey = tabKey => {
-    if (tabKey === 'projects') {
-      return null;
-    }
-
-    if (tabKey === 'applications') {
-      return null;
-    }
-
-    if (tabKey === 'articles') {
-      return null;
-    }
-
-    return null;
-  };
-
-  renderUserInfo = currentUser => (
-    <div className={styles.detail}>
-      <p>
-        <ContactsOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {currentUser.title}
-      </p>
-      <p>
-        <ClusterOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {currentUser.group}
-      </p>
-      <p>
-        <HomeOutlined
-          style={{
-            marginRight: 8,
-          }}
-        />
-        {
-          (
-            currentUser.geographic || {
-              province: {
-                label: '',
-              },
-            }
-          ).province.label
-        }
-        {
-          (
-            currentUser.geographic || {
-              city: {
-                label: '',
-              },
-            }
-          ).city.label
-        }
-      </p>
-    </div>
-  );
+  // 确认创建大屏按钮回调函数
+  createBigScreen = () => {
+    const { titleVal, curImg } = this.state;
+    history.push({pathname:'/visual-template/config-screen',params:{title: titleVal, templateId: curImg.id}});
+  }
 
   render() {
-    const { tabKey } = this.state;
-    const { currentUser = {}, currentUserLoading } = this.props;
-    const dataLoading = currentUserLoading || !(currentUser && Object.keys(currentUser).length);
+    const { list, curImg, descriptionContent } = this.state;
     return (
-      <GridContent>
-        <Row gutter={24}>
-          <Col lg={7} md={24}>
-            <Card
-              bordered={false}
-              style={{
-                marginBottom: 24,
-              }}
-              loading={dataLoading}
-            >
-              {!dataLoading && (
-                <div>
-                  <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
-                    <div className={styles.name}>{currentUser.name}</div>
-                    <div>{currentUser.signature}</div>
-                  </div>
-                  {this.renderUserInfo(currentUser)}
-                  <Divider dashed />
-                  <TagList tags={currentUser.tags || []} />
-                  <Divider
-                    style={{
-                      marginTop: 16,
-                    }}
-                    dashed
-                  />
-                  <div className={styles.team}>
-                    <div className={styles.teamTitle}>团队</div>
-                    <Row gutter={36}>
-                      {currentUser.notice &&
-                        currentUser.notice.map(item => (
-                          <Col key={item.id} lg={24} xl={12}>
-                            <Link to={item.href}>
-                              <Avatar size="small" src={item.logo} />
-                              {item.member}
-                            </Link>
-                          </Col>
-                        ))}
-                    </Row>
-                  </div>
+     <div>
+       <Row style={{flexFlow:"unset"}}>
+         <Col flex="200px" className={styles.left}>
+          <List
+            rowKey="id"
+            dataSource={list}
+            renderItem={item => {
+                return (
+                  <List.Item key={item.id} onClick={()=>this.checkTemplate(item)}>
+                    <Card
+                      hoverable
+                      className={styles.resetCard}
+                      cover={
+                        <img
+                          alt=""
+                          className={styles.cardAvatar}
+                          src={item.img}
+                        />
+                      }
+                    >
+                    <div style={{fontWeight:'bold'}}>{item.content.title}</div>
+                    </Card>
+                  </List.Item>
+                )
+              }
+            }
+          />
+         </Col>
+         <Col flex="auto" className={styles.right}>
+          <Row style={{height:'100%',flexFlow:"unset"}}>
+            
+            <Col span={16} >
+              {curImg.img?<img
+                alt="大图版的大屏"
+                className={styles.bigImg}
+                src={curImg.img}
+              />:null}
+            </Col>
+            <Col span={8}>
+              <Card style={{height:'100%'}}>
+                <div style={{marginBottom:"20px"}}>
+                  <div className={styles.descriptionTitle}>{descriptionContent.title}</div>
+                  <div>比例：{descriptionContent.ratio}</div>
+                  <div>分辨率：{descriptionContent.pxr}</div>
                 </div>
-              )}
-            </Card>
-          </Col>
-          <Col lg={17} md={24}>
-            <Card
-              className={styles.tabsCard}
-              bordered={false}
-              tabList={operationTabList}
-              activeTabKey={tabKey}
-              onTabChange={this.onTabChange}
-            >
-              {this.renderChildrenByTabKey(tabKey)}
-            </Card>
-          </Col>
-        </Row>
-      </GridContent>
+                  
+                <div style={{marginBottom:"20px"}}>
+                  <div className={`${styles.descriptionTitle} ${styles.introduce}`}>模板介绍</div>
+                  <div>{descriptionContent.description}</div>
+                </div>
+              
+                <div>
+                  <div className={`${styles.descriptionTitle} ${styles.useTem}`}>使用模板</div>
+                  <Input onChange={this.inputChange} placeholder="请输入大屏名称" style={{marginBottom: "10px"}}/>
+                  <Button type="primary" onClick={()=>this.createBigScreen()}>创建大屏</Button>
+                </div>
+              </Card>
+            </Col>
+            
+          </Row>
+         </Col>
+       </Row>
+     </div>
     );
   }
 }
 
-export default connect(({ loading, accountAndcenter }) => ({
-  currentUser: accountAndcenter.currentUser,
-  currentUserLoading: loading.effects['accountAndcenter/fetchCurrent'],
-}))(VisualTemplate);
+export default VisualTemplate

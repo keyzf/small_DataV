@@ -7,7 +7,7 @@ export default () => (
   <PageHeaderWrapper content=" 这个页面只有 admin 权限才能查看">
     <Card>
       <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
+        message="Small_DataV 现已发布，欢迎使用 npm run ui 启动体验。"
         type="success"
         showIcon
         banner
@@ -22,7 +22,7 @@ export default () => (
           textAlign: 'center',
         }}
       >
-        <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
+        <SmileTwoTone />Small_DataV<HeartTwoTone twoToneColor="#eb2f96" /> You
       </Typography.Title>
     </Card>
     <p

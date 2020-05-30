@@ -5,37 +5,37 @@ function getFakeCaptcha(req, res) {
 export default {
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
-    name: 'Serati Ma',
-    avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+    name: 'Zero two',
+    avatar: '',
     userid: '00000001',
-    email: 'antdesign@alipay.com',
-    signature: '海纳百川，有容乃大',
-    title: '交互专家',
-    group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
+    email: 'shenyukang@126.com',
+    signature: '02与016，魔女与王子',
+    title: 'Darling in the Franxx',
+    group: '',
     tags: [
       {
         key: '0',
-        label: '很有想法的',
+        label: 'Franxx',
       },
       {
         key: '1',
-        label: '专注设计',
+        label: '鹤望兰号',
       },
       {
         key: '2',
-        label: '辣~',
+        label: '016 & 02',
       },
       {
         key: '3',
-        label: '大长腿',
+        label: '灵魂',
       },
       {
         key: '4',
-        label: '川妹子',
+        label: '比翼鸟',
       },
       {
         key: '5',
-        label: '海纳百川',
+        label: 'ひとり',
       },
     ],
     notifyCount: 12,
@@ -43,16 +43,16 @@ export default {
     country: 'China',
     geographic: {
       province: {
-        label: '浙江省',
+        label: '国家队',
         key: '330000',
       },
       city: {
-        label: '杭州市',
+        label: '二次元',
         key: '330100',
       },
     },
-    address: '西湖区工专路 77 号',
-    phone: '0752-268888888',
+    address: '魔女和王子在Franxx上谈了一场义无反顾的恋爱',
+    phone: '0000 1314 1314 1314',
   },
   // GET POST 可省略
   'GET /api/users': [
@@ -78,7 +78,7 @@ export default {
   'POST /api/login/account': (req, res) => {
     const { password, userName, type } = req.body;
 
-    if (password === 'ant.design' && userName === 'admin') {
+    if (password === '123' && userName === 'admin') {
       res.send({
         status: 'ok',
         type,
@@ -87,7 +87,7 @@ export default {
       return;
     }
 
-    if (password === 'ant.design' && userName === 'user') {
+    if (password === '123' && userName === 'user') {
       res.send({
         status: 'ok',
         type,

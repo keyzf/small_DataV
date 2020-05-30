@@ -52,7 +52,7 @@ const PageHeaderContent = ({ currentUser }) => {
   return (
     <div className={styles.pageHeaderContent}>
       <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
+        <Avatar size="large" src="/Zero two_new3.png" />
       </div>
       <div className={styles.content}>
         <div className={styles.contentTitle}>
